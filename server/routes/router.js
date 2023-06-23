@@ -113,23 +113,18 @@ router.post("/login", async (req, res) => {
             const isMatch = await bcrypt.compare(password, userlogin.password);
             // console.log(isMatch +"Password match");
 
-            // token generate
-
-            const token= await userlogin.generateAuthtokenn();
-            // console.log(token);
-
-            res.cookie("Ecommerce", token,{
-                expires: new Date(Date.now() + 900000),
-                httpOnly:true
-            })
-            
-
-
-
             if (!isMatch) {
                 res.status(400).json({ error: "invalid crediential pass" });
             } else {
-                
+                // token generate
+
+                const token= await userlogin.generateAuthtokenn();
+                // console.log(token);
+
+                res.cookie("Ecommerce", token,{
+                    expires: new Date(Date.now() + 900000),
+                    httpOnly:true
+                })
                 res.status(201).json(userlogin);
             }
 

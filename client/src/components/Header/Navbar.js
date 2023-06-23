@@ -14,6 +14,10 @@ import Rightheader from "./Rightheader";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import LogoutIcon from '@mui/icons-material/Logout'
+import { ToastContainer, toast } from 'react-toastify';
+import { useSelector } from "react-redux";
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 
 const Navbar = () => {
   const [dropen, setDropen] = useState(false);
@@ -61,6 +65,12 @@ const Navbar = () => {
     setDropen(false);
   };
 
+  const [text, setText]= useState("");
+  console.log(text)
+  const [liopen, setLiopen]= useState(true)
+
+  const {products}= useSelector(state=> state.getproductsdata);
+
   const logoutuser = async () => {
     const res2 = await fetch("/logout", {
       method: "GET",
@@ -78,11 +88,19 @@ const Navbar = () => {
       console.log("Error logout");
     } else {
       console.log("data valid");
-      alert("log out successful")
+      // alert("log out successful")
+      toast.success('Logout successful',{
+        position:"top-center",
+      })
       setAccount(false);
       history("/")
     }
   };
+
+  const getText=(items)=>{
+    setText(items)
+    setLiopen(false)
+  }
 
 
   useEffect(() => {
@@ -106,10 +124,34 @@ const Navbar = () => {
             </Link>
           </div>
           <div className="nav_searchbar">
-            <input type="text" name="" id="" />
+            <input type="text" name="" id="" 
+            
+            onChange={(e)=>getText(e.target.value)}
+            placeholder="Search your products"
+            />
+            
             <div className="search_icon">
               <SearchIcon id="search" />
             </div>
+
+
+            {/* search filter */}
+
+            {
+              text && <List className='extrasearch' hidden={liopen}>
+                {
+                  products.filter(product=>product.title.longTitle.toLowerCase().includes(text.toLowerCase())).map(product=>(
+                    <ListItem>
+
+                      <NavLink to={`/getproductsone/${product.id}`} onClick={()=>setLiopen(true)}>
+                        {product.title.longTitle} 
+                        </NavLink>
+                      
+                    </ListItem>
+                  ))
+                }
+              </List>
+            }
           </div>
         </div>
         <div className="right">
@@ -130,6 +172,8 @@ const Navbar = () => {
                 </Badge>
               </NavLink>
             )}
+
+            <ToastContainer/>
 
             <p>Cart</p>
           </div>

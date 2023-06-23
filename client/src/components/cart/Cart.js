@@ -4,13 +4,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import './cart.css';
 import { useEffect, useState } from 'react';
 import { LoginContext } from '../context/ContextProvider';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Cart = () => {
   //  console.log(id);
   const {account, setAccount}= useContext(LoginContext);
   // console.log(account);
   const {id}=useParams("");
-  const [inddata, setinddata] = useState([]);
+  const [inddata, setinddata] = useState("");
   console.log(inddata);
   const history= useNavigate("");
 
@@ -35,7 +36,7 @@ const Cart = () => {
     }
   }
 useEffect(() => {
-   getinddata();
+  setTimeout(getinddata,1000)
 }, [id])
 
 // add o cart 
@@ -100,6 +101,13 @@ const addtocart =async (id)=>{
             </div>
         </div>
     }
+
+
+    {!inddata?
+    <div className="circle">
+    <CircularProgress/>
+    <h2>Loading</h2>
+  </div>:""}
     </div>
   )
 }
