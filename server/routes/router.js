@@ -146,27 +146,89 @@ router.post("/login", async (req, res) => {
 
 });
 
-router.post("/addcart/:id" , authenicate, async(req, res)=>{
+
+router.post("/addcart/:id", authenicate, async (req, res) => {
+
     try {
-        const {id}=req.params;
-        const cart= await Products.findOne({id:id});
-        console.log(cart +"cart value");
+        const { id } = req.params;
+        const cart = await Products.findOne({ id: id });
+        console.log(cart + "cart value");
 
-        const UserContact= USER.findOne({_id: req.userID});
-        console.log(UserContact);
+        const Usercontact = await USER.findOne({ _id: req.userID });
+        console.log(Usercontact);
 
-        if(UserContact){
-            const cartData= await UserContact.addcartdata(cart);
-            await UserContact.save();
+
+        if (Usercontact) {
+            const cartData = await Usercontact.addcartdata(cart);
+
+            await Usercontact.save();
             console.log(cartData);
-            res.status(201).json(UserContact);
-        }else{
+            console.log(Usercontact);
+            res.status(201).json(Usercontact);
+        }
+        else{
             res.status(401).json({error: "Invalid User"});
         }
     } catch (error) {
-        res.status(401).json({error: "Invalid User"});
+        console.log(error);
     }
-})
+});
+
+// get cart details
+router.get("/cartdetails", authenicate, async (req, res) => {
+    try {
+        const buyuser = await USER.findOne({ _id: req.userID });
+        console.log(buyuser);
+        res.status(201).json(buyuser);
+    } catch (error) {
+        console.log(error + "error for buy now");
+    }
+});
+
+// get user is login or not
+router.get("/validuser", authenicate, async (req, res) => {
+    try {
+        const validuserone = await USER.findOne({ _id: req.userID });
+        console.log(validuserone);
+        res.status(201).json(validuserone);
+    } catch (error) {
+        console.log(error + "error for valid user");
+    }
+});
+
+router.delete("/remove/:id", authenicate, async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        req.rootUser.carts = req.rootUser.carts.filter((curel) => {
+            return curel.id != id
+        });
+
+        req.rootUser.save();
+        res.status(201).json(req.rootUser);
+        console.log("iteam remove");
+
+    } catch (error) {
+        console.log("error" + error);
+        res.status(400).json(req.rootUser);
+    }
+});
+
+router.get("/logout", authenicate, async (req, res) => {
+    try {
+        req.rootUser.tokens = req.rootUser.tokens.filter((curelem)=>{
+            return curelem.token!==req.token
+        })
+
+        res.clearCookie("Ecommerce", {path:"/"})
+        req.rootUser.save();
+        res.status(201).json(req.rootUser.tokens);
+        console.log("User logout")
+
+    } catch (error) {
+        console.log("Error for user logout")
+    }
+});
 
 
 module.exports=router;

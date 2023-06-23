@@ -7,8 +7,10 @@ const authenicate = async(req,res,next)=>{
         const token = req.cookies.Ecommerce;
         
         const verifyToken = jwt.verify(token,keysecret);
+        console.log(verifyToken);
      
         const rootUser = await User.findOne({_id:verifyToken._id,"tokens.token":token});
+        console.log(rootUser);
        
 
         if(!rootUser){ throw new Error("User Not Found") };
@@ -27,3 +29,4 @@ const authenicate = async(req,res,next)=>{
 };
 
 module.exports = authenicate;
+

@@ -1,14 +1,20 @@
 import { Divider } from '@mui/material';
-import React from 'react'
-import { useParams } from 'react-router-dom';
+import React, { useContext } from 'react'
+import { useNavigate, useParams } from 'react-router-dom';
 import './cart.css';
 import { useEffect, useState } from 'react';
+import { LoginContext } from '../context/ContextProvider';
 
 const Cart = () => {
+  //  console.log(id);
+  const {account, setAccount}= useContext(LoginContext);
+  // console.log(account);
+  const {id}=useParams("");
   const [inddata, setinddata] = useState([]);
   console.log(inddata);
-  const {id}=useParams("");
-  // console.log(id);
+  const history= useNavigate("");
+
+
 
   const getinddata=async()=>{
     const res= await fetch(`/getproductsone/${id}`,{
@@ -32,6 +38,7 @@ useEffect(() => {
    getinddata();
 }, [id])
 
+// add o cart 
 const addtocart =async (id)=>{
       const checkres= await fetch (`/addcart/${id}`,{
         method:"POST",
@@ -46,7 +53,7 @@ const addtocart =async (id)=>{
       })
 
       const data1=await checkres.json();
-      console.log(data1 + "Frontend data");
+      console.log(data1);
 
       if(checkres.status ===401 || !data1){
           console.log("User Invalid");
@@ -55,7 +62,9 @@ const addtocart =async (id)=>{
 
       }
       else{
-          alert("Data added in your cart Successfully");
+          // alert("Data added in your cart Successfully");
+          setAccount(data1);
+          history("/buynow");
       }
 }
 
