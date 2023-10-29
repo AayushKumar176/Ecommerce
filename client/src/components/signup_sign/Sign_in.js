@@ -31,7 +31,8 @@ const Sign_in = () => {
     e.preventDefault();
     const {email,password}=logdata
     
-    const res=await fetch("https://ecommercebackend-2is9.onrender.com/login",{
+    // const res=await fetch("https://ecommercebackend-2is9.onrender.com/login",{
+    const res=await fetch("/login",{
         method:'POST',
         headers:{
             "Content-Type":"application/json"

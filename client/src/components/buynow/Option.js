@@ -9,7 +9,9 @@ const Option = ({deletedata , get}) => {
   const {account, setAccount}= useContext(LoginContext);
  const removedata= async(req, res)=>{
     try {
-      const res= await fetch (`https://ecommercebackend-2is9.onrender.com/remove/${deletedata}`, {
+      // const res= await fetch (`https://ecommercebackend-2is9.onrender.com/remove/${deletedata}`, {
+      const res= await fetch (`/remove/${deletedata}`, {
+        
       method: "DELETE",
       headers:{
         Accept:"application/json",

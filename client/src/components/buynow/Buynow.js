@@ -1,4 +1,3 @@
-
 import { Divider } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import "./buynow.css";
@@ -12,7 +11,8 @@ const Buynow = () => {
   console.log(cartdata);
 
   const getdatabuy = async () => {
-    const res = await fetch("https://ecommercebackend-2is9.onrender.com/cartdetails", {
+    // const res = await fetch("https://ecommercebackend-2is9.onrender.com/cartdetails", {
+    const res = await fetch("/cartdetails", {
       method: "GET",
       headers: {
         Accept: "application/json",

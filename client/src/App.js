@@ -8,6 +8,8 @@ import Sign_in from './components/signup_sign/Sign_in';
 import SignUp from './components/signup_sign/SignUp';
 import Cart from './components/cart/Cart';
 import Buynow from './components/buynow/Buynow';
+import Success from './components/payment/Success';
+import Fail from './components/payment/Fail';
 import {
   Routes,Route, 
 } from "react-router-dom";
@@ -38,6 +40,8 @@ function App() {
         <Route path="/register" element={<SignUp/>}/>
         <Route path="/getproductsone/:id" element={<Cart/>}/>
         <Route path="/buynow" element={<Buynow/>}/>
+        <Route path="/success" element={<Success/>}/>
+        <Route path="/fail" element={<Fail/>}/>
      </Routes>
      
      <Footer/>

@@ -18,7 +18,8 @@ const Cart = () => {
 
 
   const getinddata=async()=>{
-    const res= await fetch(`https://ecommercebackend-2is9.onrender.com/getproductsone/${id}`,{
+    // const res= await fetch(`https://ecommercebackend-2is9.onrender.com/getproductsone/${id}`,{
+    const res= await fetch(`/getproductsone/${id}`,{
       method:"GET",
       headers:{
         "Content-Type":"application/json"
@@ -41,7 +42,7 @@ useEffect(() => {
 
 // add o cart 
 const addtocart =async (id)=>{
-      const checkres= await fetch (`https://ecommercebackend-2is9.onrender.com/addcart/${id}`,{
+      const checkres= await fetch (`/addcart/${id}`,{
         method:"POST",
       headers:{
         Accept:"application/json",
