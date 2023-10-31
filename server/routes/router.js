@@ -4,6 +4,7 @@ const Products=require("../models/productsSchema");
 const USER= require("../models/userSchema");
 const bcrypt=require("bcryptjs");
 const authenicate = require('../middleware/authenticate');
+const stripe= require("stripe")("sk_test_51O583sSDNmhkRrxymkldo9EGFavg33jcbGM6f0TeUiroci62wnUyq3O8gTGQqGcI62ovO3UfwTgAbKJNko71hghj00EnWeFsar")
 
 
 // get all products details
@@ -208,6 +209,32 @@ router.delete("/remove/:id", authenicate, async (req, res) => {
         res.status(400).json(req.rootUser);
     }
 });
+
+router.post("/api/create/check-out-session", async(req, res)=>{
+    const {products}=req.body
+
+    const lineItems = products.map((product)=>({
+        price_data:{
+            currency:"INR",
+            product_data:{
+                name:product.title.longTitle
+            },
+            unit_amount:product.price.cost*100
+
+        },
+        quantity:1
+    }))
+
+    const session= await stripe.checkout.sessions.create({
+        payment_method_types:["card"],
+        line_items:lineItems,
+        mode:"payment",
+        success_url:"http://localhost:3000/success",
+        cancel_url:"http://localhost:3000/fail",
+    })
+    res.json({id:session.id})
+
+})
 
 router.get("/logout", authenicate, async (req, res) => {
     try {
